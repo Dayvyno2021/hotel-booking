@@ -1,0 +1,15 @@
+.body1 {
+  background-color: rgba(255, 214, 153, 0.5);
+}
+
+.body {
+  min-height: 85vh;
+}
+
+.spinner {
+  background-color: rgb(255, 214, 153);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
