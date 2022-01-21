@@ -1,11 +1,11 @@
 import React, { useState, useEffect }  from 'react'
 import {useLocation, useNavigate, Link} from 'react-router-dom'
 import {Form, Button, Row, Col, Container} from 'react-bootstrap'
-// import Message from '../components/Message'
+import {MessageDanger} from '../components/Message'
 import {useDispatch, useSelector} from 'react-redux'
 import { userRegisterAction } from '../actions/userActions'
 import Loader from '../components/Loader'
-import Toast from '../components/Toast'
+// import Toast from '../components/Toast'
 
 const RegisterScreen = () => {
 
@@ -23,7 +23,7 @@ const RegisterScreen = () => {
   const userRegisterReducer = useSelector(state => state.userRegisterReducer)
   const {loading, user, error} = userRegisterReducer
 
-  const redirect = location.search? location.search.split('=')[1] : '/'
+  const redirect = location.search? location.search.split('=')[1] : '/dashboard'
 
   useEffect(() => {
 
@@ -43,10 +43,10 @@ const RegisterScreen = () => {
   }
 
   return (
-    <Container fluid className='p-5 d-flex justify-content-center flex-column '>
+    <Container fluid className='p-3 d-flex justify-content-center flex-column '>
       {loading && <Loader />}
-      {error && <Toast>{error}</Toast>}
-      {/* {error && <Message>{error}</Message>} */}
+      {/* {error && <Toast>{error}</Toast>} */}
+      {error && <MessageDanger verdict='Error'>{error}</MessageDanger>}
       <Row>
         <Col className='h2 d-flex justify-content-center'> Register </Col>
       </Row>

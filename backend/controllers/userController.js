@@ -24,7 +24,8 @@ const registerUser = async(req, res)=>{
             email: user.email,
             token: generateToken(user._id),
             _id: user._id,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            updatedAt: emailYes.updatedAt
           })
         } else{
           res.status(400).json('Could not create new user')
@@ -48,25 +49,28 @@ const login = async(req, res) =>{
   try {
     const {email, password} = req.body
     if (!email || !password){
-      res.status(400).json("Bad Request, Email and Password required")
+      res.status(400).json({message:"Bad Request, Email and Password required"})
     }else{
       const emailYes = await User.findOne({email})
-      if (emailYes && emailYes.checkpassword(password)){
+      if (emailYes && await emailYes.checkpassword(password)){
         res.json({
           name: emailYes.name,
           email: emailYes.email,
           token: generateToken(emailYes._id),
           _id: emailYes._id,
+          createdAt: emailYes.createdAt,
+          updatedAt: emailYes.updatedAt,
           isAdmin: emailYes.isAdmin
         })
       } else{
-        res.status(400).json("Server could not find user")
+        res.status(400).json({message:"Server could not find user"})
       }
     }
     
   } catch (error) {
     res.status(400).json({
-      message: "We could not find any user"
+      message: "We could not find any user",
+      error: process.env.NODE_ENV==="production"? null:error
     })
   }
 }

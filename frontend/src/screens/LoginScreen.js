@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react'
 import { useLocation, useNavigate, Link} from 'react-router-dom'
 import {Form, Button, Container, Row, Col} from 'react-bootstrap'
-import Message from '../components/Message'
+import {MessageDanger} from '../components/Message'
 import {useSelector, useDispatch} from 'react-redux'
 import { userLoginAction } from '../actions/userActions'
 import Loader from '../components/Loader'
@@ -18,11 +18,11 @@ const LoginScreen = () => {
 
   const dispatch = useDispatch()
 
-  const userRegisterReducer = useSelector(state => state.userRegisterReducer)
-  const {loading, user, error} = userRegisterReducer
+  const userLoginReducer = useSelector(state => state.userLoginReducer)
+  const {loading, user, error} = userLoginReducer
   
 
-  const redirect = location.search? location.search.split('=')[1] : '/'
+  const redirect = location.search? location.search.split('=')[1] : '/dashboard'
 
   useEffect(() => {
     if (user){
@@ -41,9 +41,9 @@ const LoginScreen = () => {
   }
 
   return (
-    <Container className='p-5 d-flex justify-content-center flex-column'>
+    <Container className='p-3 d-flex justify-content-center flex-column'>
       {loading && <Loader/>}
-      {error && <Message>{error}</Message>}
+      {error && <MessageDanger verdict='Error'>{error}</MessageDanger>}
       <Row>
         <Col className='h2 d-flex justify-content-center text-shadow'> Login </Col>
       </Row>

@@ -7,7 +7,7 @@ import {
   USER_LOGOUT,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
-  USER_LOGIN_SUCCESS,
+  USER_LOGIN_SUCCESS
 } from '../constants/userConstants'
 
 export const userRegisterAction = (user) => async(dispatch) =>{

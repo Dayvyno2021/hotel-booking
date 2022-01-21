@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import { notFound } from './middleware/errorMiddleware.js'
 import userRoute from './routes/userRoute.js'
+import stripeRoute from './routes/stripeRoute.js'
 const app  = express()
 
 dotenv.config()
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/user', userRoute)
+app.use('/api', stripeRoute)
 
 app.use(notFound)
 

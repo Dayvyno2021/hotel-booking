@@ -1,0 +1,107 @@
+import axios from 'axios'
+import { 
+  ACCOUNT_STATUS_FAIL,
+  ACCOUNT_STATUS_REQUEST,
+  ACCOUNT_STATUS_SUCCESS,
+  CONTINUE_STRIPE_DETAILS,
+  COUNTRY_ENTITY,
+  CREATE_CONNECT_ACCOUNT_FAIL, 
+  CREATE_CONNECT_ACCOUNT_REQUEST, 
+  CREATE_CONNECT_ACCOUNT_SUCCESS, 
+  STRIPE_PERSONAL_DETAILS} from "../constants/stripeConstants"
+
+
+  
+  export const stripeAccountAction = () => async(dispatch, getState)=>{
+    try {
+      dispatch({type: CREATE_CONNECT_ACCOUNT_REQUEST})
+
+      const {userLoginReducer: {user}} = getState()
+      
+    const config = {
+      headers: {
+        "Content-Type":"application/json",
+        authorization: `Bearer ${user.token}`
+      }
+    }
+  
+    const {data} = await axios.post(`/api/create-connect-account`, {}, config)
+    
+    dispatch({
+      type: CREATE_CONNECT_ACCOUNT_SUCCESS,
+      payload: data
+    })
+    
+    localStorage.setItem('userAccountDetails', JSON.stringify(data))
+  } catch (error) {
+    dispatch({
+      type: CREATE_CONNECT_ACCOUNT_FAIL,
+      payload: error.response.data.message && error.response ?
+        error.response.data.message : error.message
+      })
+    }
+  }
+
+
+  export const continueStripeAction = (userDetails) => async(dispatch) => {
+    
+    dispatch({
+      type: CONTINUE_STRIPE_DETAILS,
+      payload: userDetails
+    })
+    localStorage.setItem("stripeInfo", JSON.stringify(userDetails))
+  }
+
+
+  export const countryEntityAction = (countryEntity) => async(dispatch) =>{
+    dispatch({
+      type: COUNTRY_ENTITY,
+      payload: countryEntity
+    })
+
+    localStorage.setItem("countryEntity", JSON.stringify(countryEntity))
+  }
+
+  
+  export const stripePersonalAction = (personalDetails) => async(dispatch) =>{
+    dispatch({
+      type: STRIPE_PERSONAL_DETAILS,
+      payload: personalDetails
+    })
+
+    localStorage.setItem("personalDetails", JSON.stringify(personalDetails))
+  }
+
+
+
+  export const accountStatusAction = (paymentUpdate) => async(dispatch, getState) =>{
+    try {
+      dispatch({type:ACCOUNT_STATUS_REQUEST})
+
+      const {userLoginReducer:{user}} = getState()
+      const token = user.token
+
+      const config = {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization : `Bearer ${token}`
+        }
+  
+      }
+      
+      console.log(paymentUpdate)
+
+      const {data} = await axios.post(`/api/get-account-status`, paymentUpdate, config)
+      dispatch({
+        type: ACCOUNT_STATUS_SUCCESS,
+        payload: data
+      })
+
+    } catch (error) {
+      dispatch({
+        type: ACCOUNT_STATUS_FAIL,
+        payload: error.response.data.message && error.response ?
+          error.response.data.message : error.message
+      })
+    }
+  }
