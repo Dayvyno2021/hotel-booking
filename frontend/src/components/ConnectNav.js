@@ -1,12 +1,31 @@
-import React from 'react'
-import {useSelector} from 'react-redux'
+import React, {useEffect} from 'react'
+import {useSelector, useDispatch} from 'react-redux'
 import { Container, Card, Col, Row } from 'react-bootstrap'
+import { accountBalanceAction } from '../actions/stripeActions'
+import Loader from './Loader'
+import {MessageDanger} from './Message'
 
 const ConnectNav = () => {
+
+  const dispatch = useDispatch()
+
   const userLoginReducer = useSelector(state => state.userLoginReducer)
   const {user} = userLoginReducer
+
+  const accountBalanceReducer = useSelector(state=>state.accountBalanceReducer)
+  const {loading, balance, error} = accountBalanceReducer
+
+  useEffect(() => {
+    if (!balance){
+      dispatch(accountBalanceAction())
+    }
+  }, [dispatch, balance]);
+  
+
   return (
     <Container fluid >
+      {loading && <Loader/>}
+      {error && <MessageDanger>{error} </MessageDanger>}
       <Row className='d-flex justify-content-around'>
         <Col sm={5} md={4} lg={3} xl={2}>
         <Card>
@@ -28,8 +47,17 @@ const ConnectNav = () => {
         {
           user && user.stripe_seller && user.stripe_seller.charges_enabled && 
           <>
-            <Col >Pending Balance</Col>
-            <Col >Payout Balance</Col>
+            <Col >
+              <h5 style={{textDecoration: 'underline'}} className='text-light'>
+                Pending Balance
+              </h5>
+              <h5 className={`badge ${balance>2? 'bg-success' : 'bg-danger'}`}>
+                {`USD ${Number(balance).toLocaleString()}`} 
+              </h5>
+            </Col>
+            <Col >
+             <h5 className='text-light'> Payout Balance</h5>
+            </Col>
           </>
         }
       </Row>

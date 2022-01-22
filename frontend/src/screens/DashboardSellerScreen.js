@@ -14,6 +14,10 @@ const DashboardSellerScreen = () => {
   const userLoginReducer  = useSelector(state => state.userLoginReducer )
   const {loading, user, error} = userLoginReducer 
 
+  // const accountStatusReducer = useSelector(state=>state.accountStatusReducer)
+
+  // const {updatedUser} = accountStatusReducer
+
 
   return (   
     <>
@@ -30,12 +34,12 @@ const DashboardSellerScreen = () => {
         </Container>
 
         {
-          user && user._id && user.stripe_seller && user.stripe_seller.charges_enables?
+          user && user._id && user.stripe_seller && user.stripe_seller.charges_enabled?
          
          <div className='d-flex justify-content-center'>
            <Connected/> 
          </div> 
-          : 
+          :
           <div className='d-flex justify-content-center'>
             <NotConnected />
           </div>

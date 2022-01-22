@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {Container, Row, Button, Col} from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import {stripeAccountAction} from '../actions/stripeActions'
@@ -11,30 +11,32 @@ const NotConnected = () => {
 
   const dispatch = useDispatch()
 
-  const stripeAccountReducer = useSelector(state=>state.stripeAccountReducer)
-  const {loading, userAccount, error} = stripeAccountReducer
+  const userLoginReducer = useSelector(state=>state.userLoginReducer)
+  const {loading, user, error} = userLoginReducer
 
-  useEffect(()=>{
-    if (userAccount){
-      navigate(`/user/stripe-account/${userAccount._id}`)
-    }
-  },[navigate, userAccount])
-
-  const handleClick = () => {
-    dispatch(stripeAccountAction())
+  // useEffect(()=>{
+  //   if (userAccount){
+    //   }
+    // },[navigate, userAccount])
+    
+    const handleClick = () => {
+      dispatch(stripeAccountAction())
+      navigate(`/user/stripe-account/${user._id}`)
   }
 
   return (
     <Container fluid className='p-3'>
       {error && <MessageDanger>{error} </MessageDanger>}
+      {(user || error) && (
+
       <Row  className='d-flex justify-content-center'>
         <Col md={6} className='d-flex flex-column justify-content-center'>
           <h1 className='mx-auto' style={{fontSize: '36px'}}>
             <span style={{fontSize: '36px'}} className="material-icons text-secondary">apartment</span>
           </h1>
-          <h4 className='mx-auto'>
+          <h2 className='mx-auto'>
             Setup payouts to post hotel rooms
-          </h4>
+          </h2>
           <p className='lead mx-auto'>
             MERN partners with stripe to transfer earnings to your bank account
           </p>
@@ -47,6 +49,7 @@ const NotConnected = () => {
           </p>
         </Col>
       </Row>  
+      )}
     </Container>
   )
 }

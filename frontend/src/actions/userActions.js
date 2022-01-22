@@ -35,6 +35,12 @@ export const userRegisterAction = (user) => async(dispatch) =>{
 
 export const logout = () =>async(dispatch)=>{
   localStorage.removeItem('hotelUserInfo')
+  localStorage.removeItem('userAccountDetails')
+  localStorage.removeItem('stripeInfo')
+  localStorage.removeItem('countryEntity')
+  localStorage.removeItem('personalDetails')
+  localStorage.removeItem('accountStatus')
+
   document.location.href='/'
   dispatch({type:USER_LOGOUT})
 }
@@ -51,6 +57,8 @@ export const userLoginAction = (loginInfo) => async(dispatch)=>{
   
     dispatch({type: USER_REGISTER_SUCCESS, payload: data})
     dispatch({type: USER_LOGIN_SUCCESS, payload: data})
+
+    console.log(data._id, data.name)
   
     localStorage.setItem('hotelUserInfo', JSON.stringify(data))
   } catch (error) {

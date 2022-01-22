@@ -1,7 +1,7 @@
 import {combineReducers, createStore, applyMiddleware } from "redux"
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk'
-import { countryEntityReducer, stripeAccountReducer, stripePersonalReducer } from "./reducers/stripeReducers";
+import { accountBalanceReducer, accountStatusReducer, countryEntityReducer, stripeAccountReducer, stripePersonalReducer } from "./reducers/stripeReducers";
 import { userRegisterReducer, userLoginReducer,  } from "./reducers/userReducer";
 
 
@@ -11,7 +11,9 @@ const reducer = combineReducers({
   userLoginReducer: userLoginReducer,
   stripeAccountReducer: stripeAccountReducer,
   countryEntityReducer: countryEntityReducer,
-  stripePersonalReducer: stripePersonalReducer
+  stripePersonalReducer: stripePersonalReducer,
+  accountStatusReducer: accountStatusReducer,
+  accountBalanceReducer: accountBalanceReducer
 
 })
 
@@ -30,6 +32,9 @@ const countryEntity = localStorage.getItem("countryEntity")?
 const personalDetails = localStorage.getItem("personalDetails")?
   JSON.parse(localStorage.getItem("personalDetails")) : {}
 
+const accountStatus = localStorage.getItem("accountStatus")?
+  JSON.parse(localStorage.getItem("accountStatus")) : {}
+
 const initialReducer = {
   userRegisterReducer:  {user: userInfoStorage},
   userLoginReducer:  {user: userInfoStorage},
@@ -38,7 +43,9 @@ const initialReducer = {
     stripeInfo: stripeInfo,
     countryEntity: countryEntity,
     personalDetails: personalDetails
-  }
+  },
+  accountStatusReducer: {updatedUser: accountStatus}
+
 }
 const middleware = [thunkMiddleware]
 

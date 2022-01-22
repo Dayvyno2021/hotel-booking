@@ -1,4 +1,10 @@
 import { 
+  ACCOUNT_BALANCE_FAIL,
+  ACCOUNT_BALANCE_REQUEST,
+  ACCOUNT_BALANCE_SUCCESS,
+  ACCOUNT_STATUS_FAIL,
+  ACCOUNT_STATUS_REQUEST,
+  ACCOUNT_STATUS_SUCCESS,
   CONTINUE_STRIPE_DETAILS, 
   COUNTRY_ENTITY, 
   CREATE_CONNECT_ACCOUNT_FAIL, 
@@ -41,6 +47,38 @@ export const stripePersonalReducer = (state={}, action) =>{
   switch (action.type) {
     case STRIPE_PERSONAL_DETAILS:
       return {...state, personalDetails: action.payload}
+  
+    default:
+      return state
+  }
+}
+
+export const accountStatusReducer = (state={}, action)=>{
+  switch (action.type) {
+    case ACCOUNT_STATUS_REQUEST:
+      return {...state, loading: true}
+    
+    case ACCOUNT_STATUS_SUCCESS:
+      return {...state, loading: false, updatedUser: action.payload}
+
+    case ACCOUNT_STATUS_FAIL:
+      return {...state, loading: false, error: action.payload}
+  
+    default:
+      return state
+  }
+}
+
+export const accountBalanceReducer = (state={}, action)=>{
+  switch (action.type) {
+    case ACCOUNT_BALANCE_REQUEST:
+      return {...state, loading: true}
+    
+    case ACCOUNT_BALANCE_SUCCESS:
+      return {...state, loading: false, balance: action.payload}
+
+    case ACCOUNT_BALANCE_FAIL:
+      return {...state, loading: false, error: action.payload}
   
     default:
       return state

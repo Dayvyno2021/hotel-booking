@@ -50,9 +50,12 @@
     display: flex;
     justify-content: center;
   }
-}
 
-@media screen and (max-width: 576px) {
+  .connectUi {
+    display: flex;
+    justify-content: center;
+  }
+
   .buttonBooking {
     margin-top: 20px;
   }

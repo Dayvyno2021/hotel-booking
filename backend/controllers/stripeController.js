@@ -42,8 +42,8 @@ const createConnectAccount = async(req, res) =>{
 }
 
 
-//@ desc: POST find user
-//@ route: GET '/api/get-account-status'
+//@ desc: POST find Update Account Status
+//@ route: POST '/api/get-account-status'
 //@ access: private
 
 const getAccountStatus = async(req, res)=>{
@@ -54,7 +54,12 @@ const getAccountStatus = async(req, res)=>{
     if (userUpdate){
       userUpdate.stripe_seller = {
         id : userUpdate.stripe_account_id,
-        object : "account"
+        object : "account",
+        charges_enabled: true,
+        country: req.user.country,
+        details_submitted: true,
+        default_currency: "USD",
+        balance: 10000
       }
       await userUpdate.save()
 
@@ -75,5 +80,23 @@ const getAccountStatus = async(req, res)=>{
     
 }
 
+//@ desc: POST update Account Balance
+//@ route: POST '/api/get-account-balance'
+//@ access: private
 
-export {createConnectAccount, getAccountStatus}
+const getAccountBalance = async(req, res)=>{   
+  try {
+    const user = await User.findById(req.user._id).select('-password')
+    if (user && user.stripe_seller){
+      res.json(user.stripe_seller.balance)
+    } else res.json(10000)
+  } catch (error) {
+    res.status(400).json({
+      message: "Could not find user account balance",
+      systemMessage: process.env.NODE_ENV==='production'? null : error
+    })
+  }
+}
+
+
+export {createConnectAccount, getAccountStatus, getAccountBalance}

@@ -20,12 +20,16 @@ const registerUser = async(req, res)=>{
         const user = await User.create({name, email, password})
         if (user){
           res.json({
+            token: generateToken(user._id),
             name: user.name,
             email: user.email,
-            token: generateToken(user._id),
             _id: user._id,
             isAdmin: user.isAdmin,
-            updatedAt: emailYes.updatedAt
+            updatedAt: user.updatedAt,
+            createdAt: user.createdAt,
+            stripe_account_id: user.stripe_account_id,
+            stripe_seller: user.stripe_seller,
+            stripeSession: user.stripeSession
           })
         } else{
           res.status(400).json('Could not create new user')
@@ -54,13 +58,16 @@ const login = async(req, res) =>{
       const emailYes = await User.findOne({email})
       if (emailYes && await emailYes.checkpassword(password)){
         res.json({
+          token: generateToken(emailYes._id),
           name: emailYes.name,
           email: emailYes.email,
-          token: generateToken(emailYes._id),
           _id: emailYes._id,
           createdAt: emailYes.createdAt,
           updatedAt: emailYes.updatedAt,
-          isAdmin: emailYes.isAdmin
+          isAdmin: emailYes.isAdmin,
+          stripe_account_id: emailYes.stripe_account_id,
+          stripe_seller: emailYes.stripe_seller,
+          stripeSession: emailYes.stripeSession
         })
       } else{
         res.status(400).json({message:"Server could not find user"})

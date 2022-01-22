@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { 
+  ACCOUNT_BALANCE_FAIL,
+  ACCOUNT_BALANCE_REQUEST,
+  ACCOUNT_BALANCE_SUCCESS,
   ACCOUNT_STATUS_FAIL,
   ACCOUNT_STATUS_REQUEST,
   ACCOUNT_STATUS_SUCCESS,
@@ -9,6 +12,7 @@ import {
   CREATE_CONNECT_ACCOUNT_REQUEST, 
   CREATE_CONNECT_ACCOUNT_SUCCESS, 
   STRIPE_PERSONAL_DETAILS} from "../constants/stripeConstants"
+import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
 
 
   
@@ -88,18 +92,56 @@ import {
         }
   
       }
-      
-      console.log(paymentUpdate)
 
       const {data} = await axios.post(`/api/get-account-status`, paymentUpdate, config)
       dispatch({
         type: ACCOUNT_STATUS_SUCCESS,
         payload: data
       })
+      
+      dispatch({
+        type: USER_LOGIN_SUCCESS,
+        payload: data
+      })
+
+      localStorage.setItem("accountStatus", JSON.stringify(data))
 
     } catch (error) {
       dispatch({
         type: ACCOUNT_STATUS_FAIL,
+        payload: error.response.data.message && error.response ?
+          error.response.data.message : error.message
+      })
+    }
+  }
+
+
+  export const accountBalanceAction = () => async(dispatch, getState) =>{
+    try {
+      dispatch({type:ACCOUNT_BALANCE_REQUEST})
+
+      const {userLoginReducer:{user}} = getState()
+      const token = user.token
+
+      const config = {
+        headers: {
+          "Content-Type" : "application/json",
+          Authorization : `Bearer ${token}`
+        }
+  
+      }
+
+      const {data} = await axios.post(`/api/get-account-balance`, {}, config)
+      dispatch({
+        type: ACCOUNT_BALANCE_SUCCESS,
+        payload: data
+      })
+
+      // localStorage.setItem("accountBalance", JSON.stringify(data))
+
+    } catch (error) {
+      dispatch({
+        type: ACCOUNT_BALANCE_FAIL,
         payload: error.response.data.message && error.response ?
           error.response.data.message : error.message
       })

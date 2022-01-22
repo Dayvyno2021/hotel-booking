@@ -5,11 +5,11 @@ import {Link} from 'react-router-dom'
 const Connected = () => {
   return (
     <Container fluid className='p-3'>
-      <Row>
-        <Col md={10}>
+      <Row className='connectUi'>
+        <Col xs={12} sm={8} md={10}>
           <h2>Your Hotels</h2>
         </Col>
-        <Col md={2}>
+        <Col xs={12} sm={4} md={2}>
           <Link to={'/hotels/new'}>
             <Button>
               + Add New
