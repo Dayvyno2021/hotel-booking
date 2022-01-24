@@ -57,8 +57,6 @@ export const userLoginAction = (loginInfo) => async(dispatch)=>{
   
     dispatch({type: USER_REGISTER_SUCCESS, payload: data})
     dispatch({type: USER_LOGIN_SUCCESS, payload: data})
-
-    console.log(data._id, data.name)
   
     localStorage.setItem('hotelUserInfo', JSON.stringify(data))
   } catch (error) {

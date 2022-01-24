@@ -51,12 +51,33 @@
     justify-content: center;
   }
 
-  .connectUi {
-    display: flex;
-    justify-content: center;
-  }
-
   .buttonBooking {
     margin-top: 20px;
   }
+}
+
+.addHotel {
+  font-family: 'Bakbak One', cursive;
+  font-family: 'Mochiy Pop P One', sans-serif;
+}
+
+.loaderDayve {
+  position: fixed;
+  text-align: center;
+}
+
+.dayveCard {
+  border: 1px solid rgb(141, 132, 132);
+  padding: 5px;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.cdDayve {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.dayveDel {
+  cursor: pointer;
 }

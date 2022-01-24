@@ -6,6 +6,7 @@ import cors from 'cors'
 import { notFound } from './middleware/errorMiddleware.js'
 import userRoute from './routes/userRoute.js'
 import stripeRoute from './routes/stripeRoute.js'
+import hotelRoutes from './routes/hotelRoutes.js'
 const app  = express()
 
 dotenv.config()
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRoute)
 app.use('/api', stripeRoute)
+app.use('/api', hotelRoutes)
 
 app.use(notFound)
 

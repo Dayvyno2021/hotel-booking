@@ -58,8 +58,8 @@ const getAccountStatus = async(req, res)=>{
         charges_enabled: true,
         country: req.user.country,
         details_submitted: true,
-        default_currency: "USD",
-        balance: 10000
+        default_currency: "NGN",
+        balance: 100000
       }
       await userUpdate.save()
 

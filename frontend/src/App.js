@@ -12,6 +12,7 @@ import StripePaymentScreen from './screens/StripePaymentScreen'
 import StripeDetailsScreen from './screens/StripeDetailsScreen';
 import PersonalDetailsScreen from './screens/PersonalDetailsScreen';
 import StripeCallbackScreen from './screens/StripeCallbackScreen';
+import EditHotelScreen from './screens/EditHotelScreen';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path='/user/stripe-account/details/:id' element={<StripeDetailsScreen/>} />
         <Route path='/user/personal/details/:id' element={<PersonalDetailsScreen/>} />
         <Route path='/stripe-callback/:id' element={<StripeCallbackScreen/>} />
+        <Route path='/hotel/edit/:id' element={<EditHotelScreen/>} />
       </Routes>
     </div>
     <Footer />

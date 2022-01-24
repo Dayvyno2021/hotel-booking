@@ -11,6 +11,7 @@ import {
   CREATE_CONNECT_ACCOUNT_FAIL, 
   CREATE_CONNECT_ACCOUNT_REQUEST, 
   CREATE_CONNECT_ACCOUNT_SUCCESS, 
+  PAYOUT_SETTING_REQUEST, 
   STRIPE_PERSONAL_DETAILS} from "../constants/stripeConstants"
 import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
 
@@ -137,7 +138,6 @@ import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
         payload: data
       })
 
-      // localStorage.setItem("accountBalance", JSON.stringify(data))
 
     } catch (error) {
       dispatch({
@@ -147,3 +147,35 @@ import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
       })
     }
   }
+
+
+  export const payOutSettingAction = () => async(dispatch, getState) =>{
+    try {
+      dispatch({type:PAYOUT_SETTING_REQUEST})
+
+      const {userLoginReducer:{user}} = getState()
+      const token = user.token
+
+      const config = {
+        headers: {
+          Authorization : `Bearer ${token}`
+        }
+  
+      }
+
+      const {data} = await axios.get(`/api/payout-setting`, config)
+      dispatch({
+        type: PAYOUT_SETTING_REQUEST,
+        payload: data
+      })
+
+
+    } catch (error) {
+      dispatch({
+        type: PAYOUT_SETTING_REQUEST,
+        payload: error.response.data.message && error.response ?
+          error.response.data.message : error.message
+      })
+    }
+  }
+

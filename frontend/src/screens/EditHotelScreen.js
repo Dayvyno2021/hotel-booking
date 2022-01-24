@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react'
-import {MessageDanger, MessageSuccess} from '../components/Message'
+import React, {useEffect, useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import {singleHotelAction} from '../actions/hotelActions'
 import Loader from '../components/Loader'
+import {MessageDanger} from '../components/Message'
 import {Row, Col, Form, Button} from 'react-bootstrap'
 import moment from 'moment'
 import DatePicker from "react-datepicker";
-import {useDispatch, useSelector} from 'react-redux'
 import "react-datepicker/dist/react-datepicker.css";
-import { newHotelAction } from '../actions/hotelActions';
-import {NEW_HOTEL_RESET} from '../constants/hotelConstants'
 
+const EditHotelScreen = () => {
 
-const NewHotelScreen = () => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const params = useParams();
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -31,18 +31,16 @@ const NewHotelScreen = () => {
   const handleSubmit=(e)=>{
     e.preventDefault();
 
-    const hotelData = new FormData()
-    hotelData.append('title', title)
-    hotelData.append('content', content)
-    hotelData.append('location', location)
-    hotelData.append('image', image)
-    hotelData.append('price', price)
-    hotelData.append('from', from)
-    hotelData.append('to', to)
-    hotelData.append('bed', bed)
-
-    dispatch(newHotelAction(hotelData))
-
+    const hotelEditData = new FormData()
+    hotelEditData.append('title', title)
+    hotelEditData.append('content', content)
+    hotelEditData.append('location', location)
+    hotelEditData.append('image', image)
+    hotelEditData.append('price', price)
+    hotelEditData.append('from', from)
+    hotelEditData.append('to', to)
+    hotelEditData.append('bed', bed)
+    
   }
 
   const imageHandler = (e) =>{
@@ -51,24 +49,31 @@ const NewHotelScreen = () => {
     setImage(file)
   }
 
-  const newHotelReducer = useSelector(state=>state.newHotelReducer)
-  const {loading, hotel, error} = newHotelReducer
+  const singleHotelReducer = useSelector(state=>state.singleHotelReducer)
+  const {loading, anHotel, error} = singleHotelReducer
 
   useEffect(() => {
-    if (hotel){
-      dispatch({type: NEW_HOTEL_RESET})
-      // window.alert("Successfully saved")
-      window.location.reload()
-    }
-  }, [dispatch, hotel]);
-  
+    console.log('times')
+    if (!anHotel){
+      dispatch(singleHotelAction(params.id))
+    }else{
+      const from2 = new Date(anHotel.from)
+      const to2 = new Date(anHotel.to)
+      setTitle(anHotel.title)
+      setContent(anHotel.content)
+      setLocation(anHotel.location)
+      setPrice(anHotel.price)
+      setFrom(from2)
+      setTo(to2)
+      setBed(anHotel.bed)
 
+    }
+  }, [dispatch, params.id, anHotel]);
 
   return (
-    <div className='mt-2'>
+    <div className='m-3'>
       {loading && <Loader/>}
       {error && <MessageDanger>{error} </MessageDanger>}
-      {hotel && <MessageSuccess>Successfully saved</MessageSuccess>}
       <Row  className='rounded d-flex justify-content-center '>
         <Col sm={1} md={1} lg={1} xl={2} xxl={2}>
         </Col>
@@ -81,7 +86,7 @@ const NewHotelScreen = () => {
                   value={title} 
                   type="text" 
                   name = "title"
-                  placeholder="Enter hotel name" 
+                  placeholder={title}
                   onChange={(e)=>setTitle(e.target.value)}
                 />
               </Form.Group>
@@ -91,7 +96,7 @@ const NewHotelScreen = () => {
                   value={content} 
                   as="textarea"
                   rows={3}
-                  placeholder="Your hotel description..." 
+                  placeholder={content}
                   onChange={(e)=>setContent(e.target.value)}
                 />
               </Form.Group>
@@ -101,7 +106,7 @@ const NewHotelScreen = () => {
                   value={location} 
                   type="text" 
                   name = "location"
-                  placeholder="Location" 
+                  placeholder={location}
                   onChange={(e)=>setLocation(e.target.value)}
                 /> 
               </Form.Group>
@@ -119,7 +124,7 @@ const NewHotelScreen = () => {
                 <Form.Control 
                   value={price} 
                   type="number" 
-                  placeholder="Price" 
+                  placeholder={price}
                   onChange={(e)=>setPrice(e.target.value)}
                 />
               </Form.Group>
@@ -164,17 +169,16 @@ const NewHotelScreen = () => {
             </Form>
           </Col>
           <Col xs={2} sm={2} md={3} lg={3} xl={3} xxl={3} >
-            <img src={preview} alt="preview_img" className='img img-fluid m-2' />
+            <img src={anHotel && anHotel._id? `/api/hotel/image/${anHotel._id}`:preview} 
+            alt="preview_img" className='img img-fluid m-2' />
           </Col>
           <Col sm={1} md={6} lg={1} xl={2} xxl={2} className="pe-2">
           </Col>
         </Row> 
     </div>
-  )
-}
+  );
+};
 
-export default NewHotelScreen
+export default EditHotelScreen;
 
-
-
-   
+// src={`/api/hotel/image/${hotel._id}`}

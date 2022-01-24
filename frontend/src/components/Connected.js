@@ -5,13 +5,13 @@ import {Link} from 'react-router-dom'
 const Connected = () => {
   return (
     <Container fluid className='p-3'>
-      <Row className='connectUi'>
-        <Col xs={12} sm={8} md={10}>
-          <h2>Your Hotels</h2>
+      <Row className='d-flex rounded justify-content-between border border-2 border-secondary'>
+        <Col xs={6} >
+          <h2 className=' mt-2 '>Your Hotels</h2>
         </Col>
-        <Col xs={12} sm={4} md={2}>
+        <Col className='d-flex justify-content-end p-2' xs={6}>
           <Link to={'/hotels/new'}>
-            <Button>
+            <Button >
               + Add New
             </Button>
           </Link>

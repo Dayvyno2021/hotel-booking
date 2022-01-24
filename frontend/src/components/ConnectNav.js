@@ -52,7 +52,7 @@ const ConnectNav = () => {
                 Pending Balance
               </h5>
               <h5 className={`badge ${balance>2? 'bg-success' : 'bg-danger'}`}>
-                {`USD ${Number(balance).toLocaleString()}`} 
+                {`NGN ${Number(balance).toLocaleString()}`} 
               </h5>
             </Col>
             <Col >

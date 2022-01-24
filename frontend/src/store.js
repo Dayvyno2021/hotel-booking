@@ -1,7 +1,14 @@
 import {combineReducers, createStore, applyMiddleware } from "redux"
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk'
-import { accountBalanceReducer, accountStatusReducer, countryEntityReducer, stripeAccountReducer, stripePersonalReducer } from "./reducers/stripeReducers";
+import { allHotelsReducer, deleteHotelReducer, newHotelReducer, sellerHotelsReducer, singleHotelReducer } from "./reducers/hotelReducers";
+import { 
+  accountBalanceReducer, 
+  accountStatusReducer, 
+  countryEntityReducer, 
+  stripeAccountReducer, 
+  stripePersonalReducer 
+} from "./reducers/stripeReducers";
 import { userRegisterReducer, userLoginReducer,  } from "./reducers/userReducer";
 
 
@@ -13,7 +20,12 @@ const reducer = combineReducers({
   countryEntityReducer: countryEntityReducer,
   stripePersonalReducer: stripePersonalReducer,
   accountStatusReducer: accountStatusReducer,
-  accountBalanceReducer: accountBalanceReducer
+  accountBalanceReducer: accountBalanceReducer,
+  newHotelReducer: newHotelReducer,
+  allHotelsReducer: allHotelsReducer,
+  sellerHotelsReducer: sellerHotelsReducer,
+  deleteHotelReducer: deleteHotelReducer,
+  singleHotelReducer: singleHotelReducer
 
 })
 
