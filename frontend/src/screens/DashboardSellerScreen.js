@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {Col, Container, Row} from 'react-bootstrap'
+import {Button, Col, Container, Row} from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 // import {Link} from 'react-router-dom'
 import Loader from '../components/Loader'
@@ -10,14 +10,15 @@ import Connected from '../components/Connected'
 import NotConnected from '../components/NotConnected'
 import {sellerHotelsAction} from '../actions/hotelActions'
 import SmallCard from '../components/SmallCard'
+import { protectedLoginAction } from '../actions/userActions'
 
 
 const DashboardSellerScreen = () => {
 
   const dispatch = useDispatch()
 
-  const userLoginReducer  = useSelector(state => state.userLoginReducer )
-  const {loading, user, error} = userLoginReducer 
+  const protectedLoginReducer  = useSelector(state => state.protectedLoginReducer )
+  const {loading, user, error} = protectedLoginReducer
 
   const sellerHotelsReducer = useSelector(state=>state.sellerHotelsReducer)
 
@@ -26,6 +27,7 @@ const DashboardSellerScreen = () => {
   useEffect(() => {
 
     dispatch(sellerHotelsAction())
+    dispatch(protectedLoginAction())
 
   }, [dispatch]);
   
@@ -45,16 +47,28 @@ const DashboardSellerScreen = () => {
         </Container>
 
         {
-          user && user._id && user.stripe_seller && user.stripe_seller.charges_enabled?
-         
-         <div className='d-flex justify-content-center'>
-           <Connected/> 
-         </div> 
-          :
+          user && user.seller && user._id && user.stripe_seller && user.stripe_seller.charges_enabled===true && 
+          (
+            <div className='d-flex justify-content-center'>
+              <Connected/> 
+            </div> 
+          )
+        }
+        {
+          user && user.seller && user._id && user.stripe_seller && user.stripe_seller.charges_enabled===false && 
+          (
           <div className='d-flex justify-content-center'>
             <NotConnected />
           </div>
+          )
         }
+        {
+          !user.seller && 
+          (
+            <Button>Book Hotel</Button>
+          )
+        }
+         
         {loadingSH && <Loader/>}
         {errorSH && <MessageDanger>{error} </MessageDanger>}
 
@@ -67,6 +81,8 @@ const DashboardSellerScreen = () => {
             ))
           }
         </Row>
+        {/* {console.log(user && user.stripe_seller)}
+        <h1>False:{JSON.stringify(user && user.seller && user._id && user.stripe_seller && user.stripe_seller.charges_enabled===false)} </h1> */}
 
       </> }
 

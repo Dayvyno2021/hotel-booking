@@ -1,14 +1,20 @@
 import React, {useEffect} from 'react'
-import { Col, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import {useDispatch, useSelector} from 'react-redux'
 import { allHotelsAction, deleteHotelAction } from '../actions/hotelActions';
 import Loader from '../components/Loader'
 import {MessageDanger} from '../components/Message'
 import SmallCard from '../components/SmallCard';
+import { useLocation } from 'react-router-dom';
 
 const HomeScreen = () => {
 
   const dispatch = useDispatch();
+  const location = useLocation()
+
+  const searchParams = location.search.split('=')[1]
+  console.log(searchParams)
+
   const allHotelsReducer = useSelector(state=>state.allHotelsReducer)
   const {loading, hotels, error} = allHotelsReducer
 
@@ -37,7 +43,7 @@ const HomeScreen = () => {
   
 
   return (
-    <div className='p-3 m-3'>
+    <Container className='p-3 justify-content-center mx-auto m-3'>
       {loading && <Loader />}
       {error && <MessageDanger>{error} </MessageDanger>} 
       {loadingDel && <Loader />}
@@ -52,7 +58,7 @@ const HomeScreen = () => {
       ))}
       </Row>
 
-    </div>
+    </Container>
   )
 }
 

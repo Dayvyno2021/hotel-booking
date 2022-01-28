@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Col, Row} from 'react-bootstrap'
+import {Button, Card, Col, Row} from 'react-bootstrap'
 import {useSelector} from 'react-redux'
 import {Link} from 'react-router-dom'
 // import { deleteHotelAction } from '../actions/hotelActions';
@@ -66,11 +66,29 @@ const SmallCard = ({hotel, deleteHotel}) => {
           <strong>Number of beds: </strong> {hotel.bed}
         </Card.Text>
         <Card.Text className='dayveCard'>
-        <span><strong>Available from: </strong> {new Date(hotel.from).toLocaleDateString()}</span>
+        <span><strong>Available from: </strong> {new Date(hotel.from).toLocaleDateString('en-GB', {timeZone: 'UTC'})}</span>
         </Card.Text>
         <Card.Text className='dayveCard'>
-          <span><strong>Available from: </strong> {new Date(hotel.to).toLocaleDateString()}</span>
+          <span><strong>Available to: </strong> {new Date(hotel.to).toLocaleDateString('en-GB', {timeZone: 'UTC'})}</span>
         </Card.Text>
+        {/* //{
+          // Remove this button from the owners view when done
+        //   ( (user && user._id === hotel.postedBy._id) || (user && user.isAdmin===true)) && 
+        //   (
+        //  <div className='clearfix'>
+        //   <Link to={`/hotel/${hotel._id}`}>
+        //     <Button className='float-end my-1'>Book Hotel</Button>
+        //   </Link>
+        //  </div>   
+        //   )
+
+        //} */}
+
+        <div className='clearfix'>
+         <Link to={`/hotel/${hotel._id}`}>
+           <Button className='float-end my-1'>see more{`>>`} </Button>
+         </Link>
+        </div>   
       </Col>
       {( (user && user._id === hotel.postedBy._id) || (user && user.isAdmin===true)) &&
         (

@@ -14,7 +14,10 @@ import {
   SELLER_HOTELS_SUCCESS,
   SINGLE_HOTEL_REQUEST,
   SINGLE_HOTEL_SUCCESS,
-  SINGLE_HOTEL_FAIL
+  SINGLE_HOTEL_FAIL,
+  EDIT_HOTEL_REQUEST,
+  EDIT_HOTEL_SUCCESS,
+  EDIT_HOTEL_FAIL
 } from "../constants/hotelConstants"
 
 // Action 1
@@ -55,7 +58,7 @@ export const allHotelsAction = () => async(dispatch) =>{
 
     const {data} = await axios.get('/api/hotels')
 
-    dispatch({type: ALL_HOTELS_SUCCESS, payload: data})
+    dispatch({type: ALL_HOTELS_SUCCESS, payload: data}) //
 
   } catch (error) {
     dispatch({
@@ -83,10 +86,7 @@ export const sellerHotelsAction = ()=> async(dispatch, getState) =>{
 
     const {data} = await axios.get('/api/seller-hotels', config)
 
-    dispatch({
-      type: SELLER_HOTELS_SUCCESS,
-      payload: data
-    })
+    dispatch({type: SELLER_HOTELS_SUCCESS, payload: data})
 
   } catch (error) {
     dispatch({
@@ -144,6 +144,35 @@ export const singleHotelAction = (id) => async(dispatch) =>{
       type: SINGLE_HOTEL_FAIL,
       payload: error.response && error.response.data.message ?
         error.response.data.message : error.message
+    })
+  }
+}
+
+// 6. 
+
+export const editHotelAction = (id, editDetails)=> async(dispatch, getState) =>{
+  try {
+    dispatch({type:EDIT_HOTEL_REQUEST})
+
+    const {userLoginReducer: {user}} = getState()
+    const token = user.token
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const {data} = await axios.put(`/api/edit/hotel/${id}`, editDetails, config)
+
+    dispatch({type: EDIT_HOTEL_SUCCESS, payload: data})
+
+  } catch (error) {
+    dispatch({
+      type: EDIT_HOTEL_FAIL,
+      payload: error.response && error.response.data.message?
+        error.response.data.message: error.message
     })
   }
 }

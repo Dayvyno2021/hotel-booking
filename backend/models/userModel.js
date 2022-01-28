@@ -6,11 +6,20 @@ const userSchema = mongoose.Schema({
   email: {type: String, required: true, unique: true},
   password: {type: String, required: true},
   isAdmin: {type: Boolean, required: true, default: false},
+  seller:{type: Boolean, required: true, default: false},
   stripe_account_id: '',
-  stripe_seller: {},
+  stripe_seller: {
+     id: '',
+     object: '',
+     charges_enabled: {type: Boolean, default: false},
+     country: '',
+     details_submitted: {type: Boolean, default: true},
+     default_currency:'',
+     balance: {type: Number, default: 0}
+  },
   stripeSession: {}
 }, {
-  timestamps: true
+  timestamps: true, strict: false
 }
 )
 
@@ -28,3 +37,4 @@ userSchema.methods.checkpassword =  async function(enteredpassword) {
 const User = mongoose.model('User', userSchema);
 
 export default User
+

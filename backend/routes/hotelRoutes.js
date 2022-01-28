@@ -8,7 +8,8 @@ import {
   deleteHotelAdmin, 
   image, 
   sellerHotels,
-  singleHotel
+  singleHotel,
+  updateHotel
 } from '../controllers/hotelControllers.js'
 
 
@@ -19,5 +20,6 @@ router.route('/hotel/image/:hotelId').get(image)
 router.route('/seller-hotels').get(protect, sellerHotels)
 router.route('/hotel/delete/:id').delete(protect, admin, deleteHotelAdmin)
 router.route('/hotel/:hotelId').get(singleHotel)
+router.route('/edit/hotel/:id').put(protect, formidableMiddleware(), updateHotel)
 
 export default router

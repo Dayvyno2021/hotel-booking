@@ -1,18 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import {singleHotelAction} from '../actions/hotelActions'
+import { useParams, useNavigate } from 'react-router-dom';
+import {editHotelAction, singleHotelAction} from '../actions/hotelActions'
 import Loader from '../components/Loader'
-import {MessageDanger} from '../components/Message'
+import {MessageDanger, MessageSuccess} from '../components/Message'
 import {Row, Col, Form, Button} from 'react-bootstrap'
 import moment from 'moment'
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {EDIT_HOTEL_RESET} from '../constants/hotelConstants'
 
 const EditHotelScreen = () => {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -24,9 +26,6 @@ const EditHotelScreen = () => {
   const [bed, setBed] = useState('')
     
   
-    const [preview, setPreview] = useState(
-      'https:via.placeholder.com/100x100.png?text=PREVIEW'
-      )
 
   const handleSubmit=(e)=>{
     e.preventDefault();
@@ -40,7 +39,8 @@ const EditHotelScreen = () => {
     hotelEditData.append('from', from)
     hotelEditData.append('to', to)
     hotelEditData.append('bed', bed)
-    
+
+    dispatch(editHotelAction(params.id, hotelEditData))
   }
 
   const imageHandler = (e) =>{
@@ -52,23 +52,38 @@ const EditHotelScreen = () => {
   const singleHotelReducer = useSelector(state=>state.singleHotelReducer)
   const {loading, anHotel, error} = singleHotelReducer
 
+  const editHotelReducer = useSelector(state=>state.editHotelReducer)
+  const {loading: loadingUPD, success, error: errorUPD} =  editHotelReducer
+
   useEffect(() => {
     console.log('times')
-    if (!anHotel){
-      dispatch(singleHotelAction(params.id))
-    }else{
-      const from2 = new Date(anHotel.from)
-      const to2 = new Date(anHotel.to)
-      setTitle(anHotel.title)
-      setContent(anHotel.content)
-      setLocation(anHotel.location)
-      setPrice(anHotel.price)
-      setFrom(from2)
-      setTo(to2)
-      setBed(anHotel.bed)
+    if (success){
+      dispatch({type: EDIT_HOTEL_RESET})
+      navigate('/dashboard')
 
+    } else{
+      if (!anHotel || params.id !== anHotel._id){
+        dispatch(singleHotelAction(params.id))
+      }else{
+        const from2 = new Date(anHotel.from)
+        const to2 = new Date(anHotel.to)
+        setTitle(anHotel.title)
+        setContent(anHotel.content)
+        setLocation(anHotel.location)
+        setPrice(anHotel.price)
+        setFrom(from2)
+        setTo(to2)
+        setBed(anHotel.bed)
+        setPreview(`/api/hotel/image/${anHotel._id}`)
+  
+      }
     }
-  }, [dispatch, params.id, anHotel]);
+  }, [dispatch, params.id, anHotel, success, navigate]);
+
+  const [preview, setPreview] = useState(
+      "https:via.placeholder.com/100x100.png?text=PREVIEW"
+    )
+
 
   return (
     <div className='m-3'>
@@ -163,13 +178,16 @@ const EditHotelScreen = () => {
               </Form.Select>
 
               </Form.Group>
+              {loadingUPD && <Loader/>}
+              {errorUPD && <MessageDanger> {errorUPD} </MessageDanger>}
+              {success && <MessageSuccess/>}
               <Button type='submit'>
                 Save
               </Button>
             </Form>
           </Col>
           <Col xs={2} sm={2} md={3} lg={3} xl={3} xxl={3} >
-            <img src={anHotel && anHotel._id? `/api/hotel/image/${anHotel._id}`:preview} 
+            <img src={preview} 
             alt="preview_img" className='img img-fluid m-2' />
           </Col>
           <Col sm={1} md={6} lg={1} xl={2} xxl={2} className="pe-2">

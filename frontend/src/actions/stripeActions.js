@@ -13,7 +13,7 @@ import {
   CREATE_CONNECT_ACCOUNT_SUCCESS, 
   PAYOUT_SETTING_REQUEST, 
   STRIPE_PERSONAL_DETAILS} from "../constants/stripeConstants"
-import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
+import { USER_PROFILE_SUCCESS } from '../constants/userConstants'
 
 
   
@@ -100,10 +100,11 @@ import { USER_LOGIN_SUCCESS } from '../constants/userConstants'
         payload: data
       })
       
-      dispatch({
-        type: USER_LOGIN_SUCCESS,
-        payload: data
-      })
+      // dispatch({
+      //   type: USER_LOGIN_SUCCESS,
+      //   payload: data
+      // })
+      dispatch({type: USER_PROFILE_SUCCESS, payload: data})
 
       localStorage.setItem("accountStatus", JSON.stringify(data))
 

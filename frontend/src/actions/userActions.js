@@ -7,7 +7,11 @@ import {
   USER_LOGOUT,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
-  USER_LOGIN_SUCCESS
+  USER_LOGIN_SUCCESS,
+  USER_PROFILE_REQUEST,
+  USER_PROFILE_SUCCESS,
+  USER_PROFILE_FAIL,
+  USER_PROFILE_RESET
 } from '../constants/userConstants'
 
 export const userRegisterAction = (user) => async(dispatch) =>{
@@ -21,6 +25,7 @@ export const userRegisterAction = (user) => async(dispatch) =>{
     const {data} = await axios.post('/api/user/register', user, config)
 
     dispatch({type: USER_REGISTER_SUCCESS, payload: data})
+    dispatch({type: USER_LOGIN_SUCCESS, payload: data})
     
     localStorage.setItem('hotelUserInfo', JSON.stringify(data))
 
@@ -43,6 +48,7 @@ export const logout = () =>async(dispatch)=>{
 
   document.location.href='/'
   dispatch({type:USER_LOGOUT})
+  dispatch({type: USER_PROFILE_RESET})
 }
 
 export const userLoginAction = (loginInfo) => async(dispatch)=>{
@@ -62,6 +68,34 @@ export const userLoginAction = (loginInfo) => async(dispatch)=>{
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL, 
+      payload: error.response && error.response.data.message? 
+        error.response.data.message : error.message
+    })
+  }
+
+}
+
+export const protectedLoginAction = () => async(dispatch, getState)=>{
+  try {
+    dispatch({type: USER_PROFILE_REQUEST})
+
+
+    const {userRegisterReducer: {user}} = getState()
+    const token = user.token
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    const {data} = await axios.get('/api/user/profile', config)
+  
+    dispatch({type: USER_PROFILE_SUCCESS, payload: data})
+  
+  } catch (error) {
+    dispatch({
+      type: USER_PROFILE_FAIL, 
       payload: error.response && error.response.data.message? 
         error.response.data.message : error.message
     })

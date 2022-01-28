@@ -17,6 +17,7 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [notify, setNotify] = useState(null)
+  const [seller, setSeller] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -35,8 +36,10 @@ const RegisterScreen = () => {
 
   const submitHandler = (e)=>{
     e.preventDefault()
+
     if (password===confirmPassword){
-      dispatch(userRegisterAction({name, email, password}))
+      dispatch(userRegisterAction({name, email, password, seller}))
+
     } else{
       setNotify('password must match')
     }
@@ -67,6 +70,11 @@ const RegisterScreen = () => {
               <Form.Text className="text-muted">
                 We'll never share your email with anyone else.
               </Form.Text>
+            </Form.Group>
+
+            <Form.Group className='d-flex' onChange={(e)=>setSeller(e.target.value)} >
+              <Form.Check type='radio' value={true} name='seller' label='Hotel seller' />
+              <Form.Check type='radio' value={false} name='seller' label='Hotel user' className='ms-5' />
             </Form.Group>
 
             <Form.Group className="mb-3 border border-1 p-1 rounded-top" controlId="formBasicPassword">

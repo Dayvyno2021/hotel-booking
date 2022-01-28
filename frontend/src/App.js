@@ -13,6 +13,10 @@ import StripeDetailsScreen from './screens/StripeDetailsScreen';
 import PersonalDetailsScreen from './screens/PersonalDetailsScreen';
 import StripeCallbackScreen from './screens/StripeCallbackScreen';
 import EditHotelScreen from './screens/EditHotelScreen';
+import ViewHotelScreen from './screens/ViewHotelScreen';
+import StripeSuccessScreen from './screens/StripeSuccessScreen';
+import StripeCancelScreen from './screens/StripeCancelScreen';
+import CheckoutStripeScreen from './screens/CheckoutStripeScreen';
 
 
 function App() {
@@ -22,7 +26,9 @@ function App() {
     <div className='fluid body'>
       <Routes>
         <Route path='/' element={<HomeScreen />} />
+        <Route path='/:id' element={<HomeScreen />} />
         <Route path='/login' element={<LoginScreen />} />
+        <Route path='/login/:id' element={<LoginScreen />} />
         <Route path='/register' element={<RegisterScreen />} />
         <Route path='/dashboard' element={<DashboardScreen />} />
         <Route path='/dashboard/seller' element={<DashboardSellerScreen/>} />
@@ -32,6 +38,11 @@ function App() {
         <Route path='/user/personal/details/:id' element={<PersonalDetailsScreen/>} />
         <Route path='/stripe-callback/:id' element={<StripeCallbackScreen/>} />
         <Route path='/hotel/edit/:id' element={<EditHotelScreen/>} />
+        <Route path='/hotel/:id' element={<ViewHotelScreen/>} />
+        <Route path='/stripe/success/:id' element={<StripeSuccessScreen/>} />
+        <Route path='/stripe/cancel' element={<StripeCancelScreen/>} />
+        <Route path='/login/:id/checkout' element={<CheckoutStripeScreen/>} />
+        <Route path='/register/:id/checkout' element={<CheckoutStripeScreen/>} />
       </Routes>
     </div>
     <Footer />

@@ -38,7 +38,7 @@ const NotConnected = () => {
             Setup payouts to post hotel rooms
           </h2>
           <p className='lead mx-auto'>
-            MERN partners with stripe to transfer earnings to your bank account
+            MERN partners with payStack to transfer earnings to your bank account
           </p>
           <Button className='mx-auto mb-3' onClick={handleClick}>
             {loading? (<> <span className="spinner-border spinner-border-sm"></span>Loading..</>):(<>Setup Payouts</> )} 

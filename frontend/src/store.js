@@ -1,7 +1,8 @@
 import {combineReducers, createStore, applyMiddleware } from "redux"
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk'
-import { allHotelsReducer, deleteHotelReducer, newHotelReducer, sellerHotelsReducer, singleHotelReducer } from "./reducers/hotelReducers";
+import { allHotelsReducer, deleteHotelReducer, editHotelReducer, newHotelReducer, sellerHotelsReducer, singleHotelReducer } from "./reducers/hotelReducers";
+import { alreadyBookedReducer, buyerPaymentReducer, getSessionReducer, paymentSuccessReducer, userOrderReducer } from "./reducers/sessionReducers";
 import { 
   accountBalanceReducer, 
   accountStatusReducer, 
@@ -9,13 +10,14 @@ import {
   stripeAccountReducer, 
   stripePersonalReducer 
 } from "./reducers/stripeReducers";
-import { userRegisterReducer, userLoginReducer,  } from "./reducers/userReducer";
+import { userRegisterReducer, userLoginReducer, protectedLoginReducer,  } from "./reducers/userReducer";
 
 
 
 const reducer = combineReducers({
   userRegisterReducer: userRegisterReducer,
   userLoginReducer: userLoginReducer,
+  protectedLoginReducer: protectedLoginReducer,
   stripeAccountReducer: stripeAccountReducer,
   countryEntityReducer: countryEntityReducer,
   stripePersonalReducer: stripePersonalReducer,
@@ -25,7 +27,13 @@ const reducer = combineReducers({
   allHotelsReducer: allHotelsReducer,
   sellerHotelsReducer: sellerHotelsReducer,
   deleteHotelReducer: deleteHotelReducer,
-  singleHotelReducer: singleHotelReducer
+  singleHotelReducer: singleHotelReducer,
+  editHotelReducer: editHotelReducer,
+  getSessionReducer: getSessionReducer,
+  buyerPaymentReducer: buyerPaymentReducer,
+  paymentSuccessReducer: paymentSuccessReducer,
+  userOrderReducer: userOrderReducer,
+  alreadyBookedReducer: alreadyBookedReducer
 
 })
 

@@ -26,6 +26,11 @@
   margin-right: 5px;
 }
 
+.checkLocked {
+  position: relative;
+  top: 4px;
+}
+
 .arrowing {
   position: relative;
   top: 6px;
@@ -80,4 +85,8 @@
 
 .dayveDel {
   cursor: pointer;
+}
+
+.icon2 {
+  color: blue;
 }

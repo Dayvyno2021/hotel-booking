@@ -8,8 +8,8 @@ import generateToken from '../utils/authToken.js'
 const registerUser = async(req, res)=>{
  
   try {
-    const {name, email, password} = req.body;
-    if (!name || !email || !password){
+    const {name, email, password, seller} = req.body;
+    if (!name || !email || !password || !seller){
       res.status(400).json('Bad Request, all fields are required')
     } else{
       const userExists = await User.findOne({email}).select('-password')
@@ -17,12 +17,13 @@ const registerUser = async(req, res)=>{
         res.status(400).json({message:'User already exists, try another email'})
       } else{
 
-        const user = await User.create({name, email, password})
+        const user = await User.create({name, email, seller, password})
         if (user){
           res.json({
             token: generateToken(user._id),
             name: user.name,
             email: user.email,
+            seller: user.seller,
             _id: user._id,
             isAdmin: user.isAdmin,
             updatedAt: user.updatedAt,
@@ -62,6 +63,7 @@ const login = async(req, res) =>{
           name: emailYes.name,
           email: emailYes.email,
           _id: emailYes._id,
+          seller: emailYes.seller,
           createdAt: emailYes.createdAt,
           updatedAt: emailYes.updatedAt,
           isAdmin: emailYes.isAdmin,

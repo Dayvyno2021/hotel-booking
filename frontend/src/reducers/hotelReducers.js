@@ -14,7 +14,11 @@ import {
   DELETE_HOTEL_FAIL,
   SINGLE_HOTEL_REQUEST,
   SINGLE_HOTEL_SUCCESS,
-  SINGLE_HOTEL_FAIL
+  SINGLE_HOTEL_FAIL,
+  EDIT_HOTEL_REQUEST,
+  EDIT_HOTEL_SUCCESS,
+  EDIT_HOTEL_FAIL,
+  EDIT_HOTEL_RESET
  } from "../constants/hotelConstants"
 
 export const newHotelReducer = (state={}, action) => {
@@ -36,10 +40,10 @@ export const newHotelReducer = (state={}, action) => {
   }
 }
 
-export const allHotelsReducer = (state={}, action) => {
+export const allHotelsReducer = (state={hotels:[]}, action) => {
   switch (action.type) {
     case ALL_HOTELS_REQUEST:
-      return {...state, loading: true}
+      return {...state, loading: true, hotels:[]}
     
     case ALL_HOTELS_SUCCESS:
       return {...state, loading: false, hotels: action.payload}
@@ -55,7 +59,7 @@ export const allHotelsReducer = (state={}, action) => {
 export const sellerHotelsReducer = (state={sellerHotels:[]}, action) => {
   switch (action.type) {
     case SELLER_HOTELS_REQUEST:
-      return {...state, loading: true}
+      return {...state, loading: true, sellerHotels: []}
     
     case SELLER_HOTELS_SUCCESS:
       return {...state, loading: false, sellerHotels: action.payload}
@@ -86,7 +90,7 @@ export const deleteHotelReducer = (state={}, action) => {
 }
 
 
-export const singleHotelReducer = (state={}, action) => {
+export const singleHotelReducer = (state={anHotel:{postedBy:{}}}, action) => {
   switch (action.type) {
     case SINGLE_HOTEL_REQUEST:
       return {...state, loading: true}
@@ -96,6 +100,26 @@ export const singleHotelReducer = (state={}, action) => {
 
     case SINGLE_HOTEL_FAIL:
       return {...state, loading:false, error: action.payload}
+  
+    default:
+      return state
+  }
+}
+
+
+export const editHotelReducer = (state={}, action) => {
+  switch (action.type) {
+    case EDIT_HOTEL_REQUEST:
+      return {...state, loading: true}
+    
+    case EDIT_HOTEL_SUCCESS:
+      return {...state, loading: false, edittedHotel: action.payload, success: true}
+
+    case EDIT_HOTEL_FAIL:
+      return {...state, loading:false, error: action.payload}
+    
+    case EDIT_HOTEL_RESET:
+      return {}
   
     default:
       return state

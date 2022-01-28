@@ -1,10 +1,15 @@
-import React from 'react'
-import { Navbar, Container, NavDropdown, Nav} from 'react-bootstrap'
+import React, {useState} from 'react'
+import { Navbar, Container, NavDropdown, Nav,} from 'react-bootstrap'
 import {useSelector, useDispatch} from 'react-redux'
 import {LinkContainer} from 'react-router-bootstrap'
 import { logout } from '../actions/userActions'
+import ProfileModal from './ProfileModal'
+import SearchBox from './SearchBox'
 
 const Header = () => {
+
+  const [show, setShow] = useState(false)
+  const handleClose = () =>setShow(!show)
 
   const dispatch = useDispatch()
   const userRegisterReducer = useSelector(state => state.userRegisterReducer)
@@ -14,7 +19,8 @@ const Header = () => {
   return (
     <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect >
       <Container>
-          <LinkContainer to={'/'}>
+        <div className='d-flex'>
+          <LinkContainer to={'/'} className='me-5'>
             <Navbar.Brand>  
               <span className="material-icons" style={{position: 'relative', top: '4px' }}>
                 home
@@ -27,13 +33,17 @@ const Header = () => {
           {
             user && 
             (
-            <LinkContainer to={'/dashboard'} >
+            <LinkContainer to={'/dashboard'} className='mx-5'>
               <Navbar.Brand>
                 Dashbord
               </Navbar.Brand>
             </LinkContainer>
             )
           }
+          <Navbar.Brand className='mx-5'>
+            <SearchBox/>
+          </Navbar.Brand>
+        </div>
           <Navbar.Toggle aria-controls="basic-navbar-nav"/>
           <Navbar.Collapse id="basic-navbar-nav" className='justify-content-end'>
             <Nav>
@@ -51,11 +61,12 @@ const Header = () => {
                   <>
                     <Nav.Link onClick={()=>dispatch(logout())} >Logout</Nav.Link>
                     <NavDropdown title={user.name} id="basic-nav-dropdown">
-                      <NavDropdown.Item >Action</NavDropdown.Item>
-                      <NavDropdown.Item >Another action</NavDropdown.Item>
-                      <NavDropdown.Item >Something</NavDropdown.Item>
-                      <NavDropdown.Divider />
-                      <NavDropdown.Item>Separated link</NavDropdown.Item>
+                      <NavDropdown.Item onClick={handleClose}  >profile</NavDropdown.Item>
+         
+                      {
+                        show && 
+                        <ProfileModal show={show} handleClose={handleClose} />
+                      }
                     </NavDropdown>
                   </>
                 )

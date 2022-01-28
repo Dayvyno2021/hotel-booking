@@ -57,7 +57,7 @@ const NewHotelScreen = () => {
   useEffect(() => {
     if (hotel){
       dispatch({type: NEW_HOTEL_RESET})
-      // window.alert("Successfully saved")
+      window.alert("Successfully saved")
       window.location.reload()
     }
   }, [dispatch, hotel]);
@@ -112,6 +112,7 @@ const NewHotelScreen = () => {
               <Form.Group controlId="formFile" className="mb-3">
                 <Form.Label>Image</Form.Label>
                 <Form.Control type="file" onChange={imageHandler} accept='image/*' />
+                <p className='text-warning'>max size: 50kb</p>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPrice">
