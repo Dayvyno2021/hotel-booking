@@ -6,9 +6,10 @@ import Loader from '../components/Loader'
 import {MessageDanger, MessageSuccess} from '../components/Message'
 import {Row, Col, Form, Button} from 'react-bootstrap'
 import moment from 'moment'
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker, { registerLocale } from "react-datepicker";
+import enGB from "date-fns/locale/en-GB";
 import {EDIT_HOTEL_RESET} from '../constants/hotelConstants'
+import MyContainer from '../components/MyContainer';
 
 const EditHotelScreen = () => {
 
@@ -56,7 +57,7 @@ const EditHotelScreen = () => {
   const {loading: loadingUPD, success, error: errorUPD} =  editHotelReducer
 
   useEffect(() => {
-    console.log('times')
+    registerLocale("en-GB", enGB);
     if (success){
       dispatch({type: EDIT_HOTEL_RESET})
       navigate('/dashboard')
@@ -146,12 +147,14 @@ const EditHotelScreen = () => {
               
 
 
-
               <Form.Group className="mb-3" controlId="formBasicFrom">
                 <Form.Label className='text-light'>From</Form.Label>
                 <DatePicker selected={from}
+                  locale="en-GB"
                   onChange={(date)=>setFrom(date)}
                   minDate={moment().toDate()}
+                  dateFormat="P"
+                  calendarContainer={MyContainer}
                 />
  
               </Form.Group>
@@ -159,22 +162,23 @@ const EditHotelScreen = () => {
               <Form.Group className="mb-3" controlId="formBasicTo">
                 <Form.Label className='text-light'>To</Form.Label>
                 <DatePicker selected={to}
+                  locale="en-GB"
+                  dateFormat="P"
                   onChange={(date)=>setTo(date)}
                   minDate={moment().toDate()}
+                  calendarContainer={MyContainer}
                 />
               </Form.Group>
 
-
-
-              <Form.Group className="mb-3" controlId="formBasicBed">
+              <Form.Group className="mb-3" >
                 <Form.Label className='text-light'>Number of beds</Form.Label>
                 <Form.Select aria-label="Default select example" value={bed}
                 onChange={(e)=>setBed(e.target.value)}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                <option key={1} value={1} >1</option>
+                <option key={2} value={2} >2</option>
+                <option  key={3} value={3} >3</option>
+                <option key={4} value={4} >4</option>
               </Form.Select>
 
               </Form.Group>

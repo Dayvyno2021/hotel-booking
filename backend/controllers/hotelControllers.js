@@ -35,21 +35,43 @@ export const createHotel = async(req, res) =>{
 }
 
 //@ desc GET all available hotels
-//@ route GET'/api/hotel
+//@ route GET'/api/hotels
 //@ access: public
 export const allHotels = async(req, res) =>{
   try {
-    const hotels = await Hotel.find({}).sort({createdAt: -1})
-    .limit(24).select("-image.data").populate('postedBy', '_id name');
+    const {name, bed, date} =  req.query
+    console.log({name, bed, date})
+    const active = Number(req.query.activePage) || 1
+    const pageSize = 5
+    const searchTitle = req.query.name? {
+      title : {$regex: req.query.name, $options: 'i'}
+
+    } : {}
+    
+    const searchBeds = req.query.bed? {
+      bed : req.query.bed
+    } : {}
+
+
+    const count = await Hotel.count({...searchBeds, ...searchTitle})
+    const hotels = await Hotel.find({...searchBeds, ...searchTitle}).sort({createdAt: -1})
+    .limit(pageSize)
+    .skip(pageSize*(active-1))
+    .select("-image.data")
+    .populate('postedBy', '_id name')
+
     if (hotels){
-      res.json(hotels)
+
+
+      res.json({hotels, pages:Math.ceil(count/pageSize) , active})
+
     } else{
       res.status(400).json({message: "Could not access hotels"})
     }
 
   } catch (error) {
     res.status(400).json({
-      message: "Server down",
+      message: "Server down" + err,
       systemMessage: process.env.NODE_ENV==="production"? null : error
     })
   }
@@ -181,7 +203,7 @@ export const updateHotel  = async(req, res) =>{
         hotel.price = fields.price || hotel.price
         hotel.from= fields.from || hotel.from
         hotel.to = fields.to || hotel.to
-        hotel.bed = fields.bed || hotel.bed
+        hotel.bed = fields.bed 
 
         await hotel.save()
         const updatedHotel = await Hotel.findById(req.params.id).select('-image.data')

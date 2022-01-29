@@ -46,7 +46,7 @@ export const allHotelsReducer = (state={hotels:[]}, action) => {
       return {...state, loading: true, hotels:[]}
     
     case ALL_HOTELS_SUCCESS:
-      return {...state, loading: false, hotels: action.payload}
+      return {...state, loading: false, hotels: action.payload.hotels, pages: action.payload.pages, active: action.payload.active}
 
     case ALL_HOTELS_FAIL:
       return {...state, loading:false, error: action.payload}

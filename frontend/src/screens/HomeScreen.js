@@ -5,18 +5,29 @@ import { allHotelsAction, deleteHotelAction } from '../actions/hotelActions';
 import Loader from '../components/Loader'
 import {MessageDanger} from '../components/Message'
 import SmallCard from '../components/SmallCard';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import Paginate from '../components/Paginate'
+import SearchBox from '../components/SearchBox';
+import DatePicker, { registerLocale } from "react-datepicker";
+import enGB from "date-fns/locale/en-GB";
+import queryString from 'query-string'
+
 
 const HomeScreen = () => {
 
   const dispatch = useDispatch();
   const location = useLocation()
+  const params = useParams()
 
-  const searchParams = location.search.split('=')[1]
-  console.log(searchParams)
+  const activePage = params.id || 1
+
+
+  const parsed = queryString.parse(location.search);
+  
+  const {name, bed, date} = parsed
 
   const allHotelsReducer = useSelector(state=>state.allHotelsReducer)
-  const {loading, hotels, error} = allHotelsReducer
+  const {loading, hotels, pages, active, error} = allHotelsReducer
 
     const deleteHotelReducer = useSelector(state=>state.deleteHotelReducer)
   const {
@@ -26,6 +37,7 @@ const HomeScreen = () => {
   } = deleteHotelReducer
 
   const deleteHotel= (id, user) =>{
+    registerLocale("en-GB", enGB);
     if (user.isAdmin ===true){
       if (window.confirm("Delete hotel?")){
         dispatch(deleteHotelAction(id))
@@ -36,28 +48,35 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    dispatch(allHotelsAction())
-  }, [dispatch, successDel]);
+    dispatch(allHotelsAction(name, activePage, bed, date))
+  }, [dispatch, successDel, name, activePage, bed, date]);
 
-
-  
 
   return (
-    <Container className='p-3 justify-content-center mx-auto m-3'>
+    <Container className='py-1 px-5 justify-content-center mx-auto m-1'>
       {loading && <Loader />}
       {error && <MessageDanger>{error} </MessageDanger>} 
       {loadingDel && <Loader />}
       {errorDel && <MessageDanger>{errorDel} </MessageDanger>} 
-        <h1 className='addHotel text-center'>All Hotels</h1>
-      
-        <Row className='my-3'>
-      {hotels && hotels.map(hotel=>(
-        <Col key={hotel._id} xs={12} className='my-2 border border-secondary border-2 rounded p-2 cdDayve bg-light'>
-          <SmallCard hotel={hotel} deleteHotel={deleteHotel}/>
+      <h3 className='addHotel text-center'>All Hotels</h3>
+      <Row>
+        <Col xs={10} sm={12} className='mx-auto'>
+          <SearchBox activePage={activePage} locale="en-GB" dateFormat="P" DatePicker={DatePicker}/>
         </Col>
-      ))}
+      </Row>
+      
+      <Row className='my-1'>
+        {hotels && hotels.map(hotel=>(
+          <Col key={hotel._id} xs={12} className='my-2 border border-secondary border-2 rounded p-2 cdDayve bg-light'>
+            <SmallCard hotel={hotel} deleteHotel={deleteHotel}/>
+          </Col>
+        ))}
       </Row>
 
+      <Row>
+        <Paginate pages={pages} active={active}/>
+      </Row>
+      
     </Container>
   )
 }

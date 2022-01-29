@@ -4,7 +4,6 @@ import {useSelector, useDispatch} from 'react-redux'
 import {LinkContainer} from 'react-router-bootstrap'
 import { logout } from '../actions/userActions'
 import ProfileModal from './ProfileModal'
-import SearchBox from './SearchBox'
 
 const Header = () => {
 
@@ -19,7 +18,6 @@ const Header = () => {
   return (
     <Navbar bg="dark" variant='dark' expand="lg" collapseOnSelect >
       <Container>
-        <div className='d-flex'>
           <LinkContainer to={'/'} className='me-5'>
             <Navbar.Brand>  
               <span className="material-icons" style={{position: 'relative', top: '4px' }}>
@@ -40,10 +38,6 @@ const Header = () => {
             </LinkContainer>
             )
           }
-          <Navbar.Brand className='mx-5'>
-            <SearchBox/>
-          </Navbar.Brand>
-        </div>
           <Navbar.Toggle aria-controls="basic-navbar-nav"/>
           <Navbar.Collapse id="basic-navbar-nav" className='justify-content-end'>
             <Nav>

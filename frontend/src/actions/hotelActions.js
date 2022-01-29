@@ -52,11 +52,18 @@ export const newHotelAction = (hotelDetails)=> async(dispatch, getState) =>{
 }
 
 // Action 2
-export const allHotelsAction = () => async(dispatch) =>{
+export const allHotelsAction = (name='', activePage='', bed='', date='') => async(dispatch) =>{
   try {
     dispatch({type: ALL_HOTELS_REQUEST})
 
-    const {data} = await axios.get('/api/hotels')
+    const config = {
+      headers:{
+        "Content-Type": "application/json"
+      }
+    }
+
+    const {data} = 
+      await axios.get(`/api/hotels/?name=${name}&activePage=${activePage}&bed=${bed}&date=${date}` , config)
 
     dispatch({type: ALL_HOTELS_SUCCESS, payload: data}) //
 
