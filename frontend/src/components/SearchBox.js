@@ -39,7 +39,7 @@ const SearchBox = ({activePage, locale, dateFormat, DatePicker}) =>{
             <Form.Select aria-label="Default select example" value={bed}
               onChange={(e)=>setBed(e.target.value)}
             >
-              <option key={0} value=''>Number of beds</option>
+              <option key={0} value=''>beds number ...</option>
               <option key={1} value={1}>1</option>
               <option key={2} value={2}>2</option>
               <option key={3} value={3}>3</option>
@@ -74,7 +74,7 @@ const SearchBox = ({activePage, locale, dateFormat, DatePicker}) =>{
             />
             <span 
               onClick={search}
-              className="material-icons ms-3 border border-2 border-secondary p-1 rounded ms-1 bg-secondary text-light" 
+              className="material-icons ms-3 border border-2 border-secondary p-1 rounded ms-1 bg-secondary text-light dayveDel" 
             >
               search
             </span>

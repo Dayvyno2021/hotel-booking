@@ -40,7 +40,7 @@ export const createHotel = async(req, res) =>{
 export const allHotels = async(req, res) =>{
   try {
     const {name, bed, date} =  req.query
-    console.log({name, bed, date})
+
     const active = Number(req.query.activePage) || 1
     const pageSize = 5
     const searchTitle = req.query.name? {
